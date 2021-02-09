@@ -24,7 +24,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     sprite.startEffect(effects.fire, 500)
     info.changeScoreBy(1)
-    if (randint(0, 20) == 1) {
+    if (randint(0, 16) == 1) {
         ammoPickup = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -54,9 +54,10 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSp
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     ammo.value += 1
-    otherSprite.destroy(effects.confetti, 500)
+    otherSprite.destroy(effects.smiles, 500)
 })
 let myEnemy: Sprite = null
+let frontOrBack = 0
 let ammoPickup: Sprite = null
 let projectile: Sprite = null
 let ammo: StatusBarSprite = null
@@ -210,6 +211,10 @@ scene.setBackgroundImage(img`
     ................................................................................................................................................................
     `)
 game.onUpdateInterval(1000, function () {
+    frontOrBack = 10
+    if (randint(0, 15) == 1) {
+        frontOrBack = 120
+    }
     myEnemy = sprites.create(img`
         ....ffffff..............
         ..ffeeeef2f.............
@@ -236,7 +241,7 @@ game.onUpdateInterval(1000, function () {
         ........................
         ........................
         `, SpriteKind.Enemy)
-    myEnemy.setPosition(randint(10, 150), 10)
+    myEnemy.setPosition(randint(10, 150), frontOrBack)
     myEnemy.follow(mySprite, 10)
     ammo.value += 1
     music.footstep.play()
