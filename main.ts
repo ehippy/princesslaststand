@@ -18,13 +18,13 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, mySprite, 0, -74)
-        projectile.startEffect(effects.trail, 2000)
+        projectile.startEffect(effects.spray, 500)
         ammo.value += -1
         music.thump.play()
     }
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
-    sprite.startEffect(effects.fire, 500)
+    sprite.startEffect(effects.disintegrate, 200)
     info.changeScoreBy(1)
     if (randint(0, 10) == 1) {
         ammoPickup = sprites.create(img`
@@ -123,7 +123,6 @@ true
 )
 controller.moveSprite(mySprite, 100, 100)
 mySprite.setStayInScreen(true)
-let ammoCount = 4
 ammo = statusbars.create(20, 3, StatusBarKind.Energy)
 ammo.attachToSprite(mySprite)
 ammo.max = 4
