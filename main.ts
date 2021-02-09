@@ -55,7 +55,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSp
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     ammo.value += 1
-    otherSprite.destroy(effects.warmRadial, 100)
+    otherSprite.destroy(effects.fountain, 100)
 })
 let myEnemy: Sprite = null
 let frontOrBack = 0
