@@ -24,6 +24,27 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     sprite.startEffect(effects.fire, 500)
     info.changeScoreBy(1)
+    if (randint(0, 20) == 1) {
+        ammoPickup = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . 4 4 . . . . . . . . . . . . 
+            . . . . 4 . . . . . . . . . . . 
+            . . 4 4 4 4 4 . . . . . . . . . 
+            . . . 4 . . . 4 4 . . . . . . . 
+            . 4 4 . . . . . 4 4 4 . . 4 . . 
+            . . . . . . . . . . 4 4 . 4 . . 
+            . . . . . . . . . . . 4 4 4 4 . 
+            . . . . . . . . . . . 4 4 4 4 4 
+            . . . . . . . . . . 4 4 4 . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Food)
+        ammoPickup.setPosition(sprite.x, sprite.y)
+    }
     sprite.destroy()
     otherSprite.destroy()
 })
@@ -31,7 +52,12 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSp
     game.over(false)
     effects.clouds.endScreenEffect()
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    ammo.value += 1
+    otherSprite.destroy(effects.confetti, 500)
+})
 let myEnemy: Sprite = null
+let ammoPickup: Sprite = null
 let projectile: Sprite = null
 let ammo: StatusBarSprite = null
 let mySprite: Sprite = null
@@ -213,4 +239,5 @@ game.onUpdateInterval(1000, function () {
     myEnemy.setPosition(randint(10, 150), 10)
     myEnemy.follow(mySprite, 10)
     ammo.value += 1
+    music.footstep.play()
 })
