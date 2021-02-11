@@ -8,6 +8,9 @@ namespace StatusBarKind {
     export const BossHealth = StatusBarKind.create()
 }
 statusbars.onZero(StatusBarKind.BossHealth, function (status) {
+    mySprite.startEffect(effects.fire, 1000)
+    bossSprite.destroy(effects.ashes, 1000)
+    pause(2000)
     game.splash("Pocked with arrows, the", "curse's wraith falls.")
     game.splash("You stand alone. Atop", "so many lain pierced.")
     game.splash("The curse was meant for", "you. Not them.")
@@ -678,7 +681,6 @@ let myEnemy: Sprite = null
 let frontOrBack = 0
 let ammoPickup: Sprite = null
 let bossHealthBar: StatusBarSprite = null
-let bossSprite: Sprite = null
 let projectile: Sprite = null
 let projectile2: Sprite = null
 let speedoY = 0
@@ -688,6 +690,7 @@ let sparkleSpeed = 0
 let sparkleCount = 0
 let mySparkleIndicator: Sprite = null
 let hasSparkle = 0
+let bossSprite: Sprite = null
 let arrKnightTaunts: string[] = []
 let bossHealthSetting = 0
 let inBossBattle = 0
@@ -905,7 +908,7 @@ game.onUpdateInterval(1000, function () {
             spawnKnight()
         }
     } else {
-        if (randint(0, 5) == 1) {
+        if (randint(0, 8) == 1) {
             spawnKnight()
         }
         fnBossFireball()
