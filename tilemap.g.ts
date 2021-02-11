@@ -6,7 +6,7 @@ namespace myTiles {
     helpers._registerFactory("tilemap", function(name: string) {
         switch(helpers.stringTrim(name)) {
             case "level1":
-            case "level1":return tiles.createTilemap(hex`0a0008000201010101010101010101040303030303030401010301010101010103010103010105060101030101030101050501010301010301010101010103010104030303030307040101010101010101010101`, img`
+            case "level1":return tiles.createTilemap(hex`0a0008000201010101010101010101090303030403030901010307080808080503010103080608050808030101030808080808070301010306080808080603010109030303030304090101010101010101010101`, img`
 . . . . . . . . . . 
 . . . . . . . . . . 
 . . . . . . . . . . 
@@ -15,7 +15,7 @@ namespace myTiles {
 . . . . . . . . . . 
 . . . . . . . . . . 
 . . . . . . . . . . 
-`, [myTiles.transparency16,sprites.dungeon.floorDark2,sprites.dungeon.floorDark5,sprites.dungeon.floorLight2,sprites.dungeon.floorMixed,sprites.dungeon.floorDark0,sprites.dungeon.floorDark1,sprites.dungeon.floorLight5], TileScale.Sixteen);
+`, [myTiles.transparency16,sprites.dungeon.floorDark2,sprites.dungeon.floorDark5,sprites.dungeon.floorLight2,sprites.dungeon.floorLight5,sprites.dungeon.floorLight4,sprites.dungeon.floorLightMoss,sprites.dungeon.floorLight1,sprites.dungeon.floorLight0,sprites.dungeon.floorDarkDiamond], TileScale.Sixteen);
         }
         return null;
     })

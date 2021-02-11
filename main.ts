@@ -86,6 +86,7 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
             true
             )
         }
+        mySprite.say("TRUTH'S LIGHT!", 1000)
     } else {
         music.knock.play()
     }
@@ -155,14 +156,20 @@ function startBossBattle () {
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
     sprite.startEffect(effects.disintegrate, 200)
     info.changeScoreBy(1)
-    if (info.score() == 50) {
-        game.splash("Your knights' bodies in", "piles surround you.")
-    }
     if (info.score() == 10) {
         mySprite.say("I would never!", 2000)
     }
+    if (info.score() == 30) {
+        mySprite.say("Stay back!", 2000)
+    }
+    if (info.score() == 50) {
+        game.splash("Your knights' bodies in", "piles surround you.")
+    }
     if (info.score() == 80) {
         mySprite.say("I would never!", 2000)
+    }
+    if (info.score() == 90) {
+        mySprite.say("My arrows seek truth!", 2000)
     }
     music.knock.play()
     if (randint(0, 10) == 1) {
@@ -332,6 +339,10 @@ function spawnKnight () {
     myEnemy.setPosition(randint(10, 150), frontOrBack)
     myEnemy.follow(mySprite, 10)
     music.footstep.play()
+    if (frontOrBack != 10 && randint(0, 3) == 1) {
+        pause(1000)
+        myEnemy.say(arrKnightTaunts._pickRandom(), 5000)
+    }
 }
 sprites.onOverlap(SpriteKind.bossFlame, SpriteKind.Player, function (sprite, otherSprite) {
     sprite.destroy()
@@ -370,7 +381,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.sparkle, function (sprite, other
     mySparkleIndicator.follow(mySprite, 100)
 })
 info.onLifeZero(function () {
-    if (inBossBattle == 0) {
+    if (inBossBattle == 1) {
         game.splash("Eyes locked with the ", "fiend, you're sure:")
         game.splash("It's lies will become", "the truth.")
     }
@@ -677,6 +688,7 @@ let sparkleSpeed = 0
 let sparkleCount = 0
 let mySparkleIndicator: Sprite = null
 let hasSparkle = 0
+let arrKnightTaunts: string[] = []
 let bossHealthSetting = 0
 let inBossBattle = 0
 let bossScoreThreshold = 0
@@ -877,6 +889,14 @@ game.splash("Foul lies have turned the", "knights on the princess!")
 bossScoreThreshold = 100
 inBossBattle = 0
 bossHealthSetting = 50
+arrKnightTaunts = [
+"In here!",
+"She said you ...",
+"Say it isn't true",
+"...",
+"Freeze!",
+"... your own Queen?"
+]
 game.onUpdateInterval(1000, function () {
     ammoStatusBar.value += 1
     if (inBossBattle == 0) {
