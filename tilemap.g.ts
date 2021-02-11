@@ -6,7 +6,7 @@ namespace myTiles {
     helpers._registerFactory("tilemap", function(name: string) {
         switch(helpers.stringTrim(name)) {
             case "level1":
-            case "level1":return tiles.createTilemap(hex`0a0008000201010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010201010101010101010101010101010101010101010101`, img`
+            case "level1":return tiles.createTilemap(hex`0a0008000201010101010101010101040303030303030401010301010101010103010103010105060101030101030101050501010301010301010101010103010104030303030307040101010101010101010101`, img`
 . . . . . . . . . . 
 . . . . . . . . . . 
 . . . . . . . . . . 
@@ -15,7 +15,7 @@ namespace myTiles {
 . . . . . . . . . . 
 . . . . . . . . . . 
 . . . . . . . . . . 
-`, [myTiles.transparency16,sprites.dungeon.floorDark2,sprites.dungeon.floorDark5], TileScale.Sixteen);
+`, [myTiles.transparency16,sprites.dungeon.floorDark2,sprites.dungeon.floorDark5,sprites.dungeon.floorLight2,sprites.dungeon.floorMixed,sprites.dungeon.floorDark0,sprites.dungeon.floorDark1,sprites.dungeon.floorLight5], TileScale.Sixteen);
         }
         return null;
     })

@@ -7,11 +7,16 @@
     "level1": {
         "id": "level1",
         "mimeType": "application/mkcd-tilemap",
-        "data": "MTAwYTAwMDgwMDAyMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAyMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA==",
+        "data": "MTAwYTAwMDgwMDAyMDEwMTAxMDEwMTAxMDEwMTAxMDEwNDAzMDMwMzAzMDMwMzA0MDEwMTAzMDEwMTAxMDEwMTAxMDMwMTAxMDMwMTAxMDUwNjAxMDEwMzAxMDEwMzAxMDEwNTA1MDEwMTAzMDEwMTAzMDEwMTAxMDEwMTAxMDMwMTAxMDQwMzAzMDMwMzAzMDcwNDAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMA==",
         "tileset": [
             "myTiles.transparency16",
             "sprites.dungeon.floorDark2",
-            "sprites.dungeon.floorDark5"
+            "sprites.dungeon.floorDark5",
+            "sprites.dungeon.floorLight2",
+            "sprites.dungeon.floorMixed",
+            "sprites.dungeon.floorDark0",
+            "sprites.dungeon.floorDark1",
+            "sprites.dungeon.floorLight5"
         ],
         "displayName": "level1"
     },
