@@ -1,3 +1,6 @@
+namespace SpriteKind {
+    export const sparkle = SpriteKind.create()
+}
 statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.EQ, statusbars.ComparisonType.Fixed, 2, function (status) {
     light.setAll(0x000000)
     light.setPixelColor(0, 0xff00ff)
@@ -9,6 +12,81 @@ statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.EQ,
     light.setPixelColor(1, 0xff00ff)
     light.setPixelColor(2, 0xff00ff)
     light.setPixelColor(3, 0xff00ff)
+})
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (hasSparkle == 1) {
+        hasSparkle = 0
+        music.pewPew.play()
+        light.setPixelColor(4, 0x000000)
+        scene.cameraShake(6, 1000)
+        sparkleCount = 10
+        sparkleSpeed = 100
+        for (let index = 0; index <= sparkleCount; index++) {
+            percAround = index / sparkleCount
+            speedoX = 2 * sparkleSpeed * percAround - sparkleSpeed
+            speedoY = -100
+            projectile2 = sprites.createProjectileFromSprite(img`
+                . . . . . 3 . . . . . . . . . . 
+                . . . . . 3 . . . . . . . . . . 
+                . . . . 3 1 3 . . . . . . . . . 
+                . . . . 3 1 3 . . . . . . . . . 
+                . . 3 3 1 9 1 3 3 . . . . . . . 
+                3 3 1 1 9 1 9 1 1 3 3 . . . . . 
+                . . 3 3 1 9 1 3 3 . . . . . . . 
+                . . . . 3 1 3 . . . . . . . . . 
+                . . . . 3 1 3 . . . . . . . . . 
+                . . . . . 3 . . . . . . . . . . 
+                . . . . . 3 . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `, mySprite, speedoX, speedoY)
+            animation.runImageAnimation(
+            projectile2,
+            [img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . 3 . . . . . . . . . 
+                . . . . . . 3 . . . . . . . . . 
+                . . . . . 3 1 3 . . . . . . . . 
+                . . . . . 3 1 3 . . . . . . . . 
+                . . . 3 3 1 9 1 3 3 . . . . . . 
+                . 3 3 1 1 9 . 9 1 1 3 3 . . . . 
+                . . . 3 3 1 9 1 3 3 . . . . . . 
+                . . . . . 3 1 3 . . . . . . . . 
+                . . . . . 3 1 3 . . . . . . . . 
+                . . . . . . 3 . . . . . . . . . 
+                . . . . . . 3 . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `,img`
+                . . . . . . . . . . . . . . . . 
+                . 3 . . . . . . . . 3 . . . . . 
+                . . 3 3 . . . . 3 3 . . . . . . 
+                . . 3 1 3 . . 3 1 3 . . . . . . 
+                . . . 3 1 3 3 1 3 . . . . . . . 
+                . . . . 3 9 9 3 . . . . . . . . 
+                . . . . 3 9 9 3 . . . . . . . . 
+                . . . 3 1 3 3 1 3 . . . . . . . 
+                . . 3 1 3 . . 3 1 3 . . . . . . 
+                . . 3 3 . . . . 3 3 . . . . . . 
+                . 3 . . . . . . . . 3 . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                `],
+            200,
+            true
+            )
+        }
+    } else {
+        music.knock.play()
+    }
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (0 < ammo.value) {
@@ -71,6 +149,12 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSp
     controller.startLightAnimation(light.runningLightsAnimation, 2000)
     game.over(false, effects.dissolve)
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.sparkle, function (sprite, otherSprite) {
+    music.powerUp.play()
+    otherSprite.destroy()
+    hasSparkle = 1
+    light.setPixelColor(4, 0x00ffff)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     ammo.value += 1
     otherSprite.destroy(effects.fountain, 100)
@@ -84,10 +168,18 @@ statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.EQ,
     light.setPixelColor(1, 0xff00ff)
     light.setPixelColor(2, 0xff00ff)
 })
+let sparklePickup: Sprite = null
 let myEnemy: Sprite = null
 let frontOrBack = 0
 let ammoPickup: Sprite = null
 let projectile: Sprite = null
+let projectile2: Sprite = null
+let speedoY = 0
+let speedoX = 0
+let percAround = 0
+let sparkleSpeed = 0
+let sparkleCount = 0
+let hasSparkle = 0
 let ammo: StatusBarSprite = null
 let mySprite: Sprite = null
 mySprite = sprites.create(img`
@@ -422,4 +514,26 @@ game.onUpdateInterval(1000, function () {
     myEnemy.follow(mySprite, 10)
     ammo.value += 1
     music.footstep.play()
+})
+game.onUpdateInterval(20000, function () {
+    sparklePickup = sprites.create(img`
+        . . . . . 3 . . . . . . . . . . 
+        . . . . . 3 . . . . . . . . . . 
+        . . . . 3 1 3 . . . . . . . . . 
+        . . . . 3 1 3 . . . . . . . . . 
+        . . 3 3 1 9 1 3 3 . . . . . . . 
+        3 3 1 1 9 1 9 1 1 3 3 . . . . . 
+        . . 3 3 1 9 1 3 3 . . . . . . . 
+        . . . . 3 1 3 . . . . . . . . . 
+        . . . . 3 1 3 . . . . . . . . . 
+        . . . . . 3 . . . . . . . . . . 
+        . . . . . 3 . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.sparkle)
+    sparklePickup.setPosition(randint(30, 130), randint(30, 90))
+    sparklePickup.startEffect(effects.halo, 5000)
 })
