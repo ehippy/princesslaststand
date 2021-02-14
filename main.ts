@@ -8,9 +8,6 @@ namespace StatusBarKind {
     export const BossHealth = StatusBarKind.create()
 }
 statusbars.onZero(StatusBarKind.BossHealth, function (status) {
-    mySprite.startEffect(effects.fire, 1000)
-    bossSprite.destroy(effects.ashes, 1000)
-    pause(2000)
     game.splash("Pocked with arrows, the", "curse's wraith falls.")
     game.splash("You stand alone. Atop", "so many lain pierced.")
     game.splash("The curse was meant for", "you. Not them.")
@@ -120,9 +117,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function startBossBattle () {
-    mySprite.say("It grows quiet...")
-    pause(5000)
-    game.splash("The whisperer appears.", "")
+    mySprite.say("THE FIEND!", 1000)
     inBossBattle = 1
     bossSprite = sprites.create(img`
         ........................
@@ -157,12 +152,12 @@ function startBossBattle () {
     bossHealthBar.setColor(2, 12, 3)
     bossHealthBar.max = bossHealthSetting
     bossHealthBar.attachToSprite(bossSprite)
-    pause(5000)
-    bossSprite.say("What's it like?", 5000)
-    pause(15000)
-    bossSprite.say("Being the villain?", 5000)
 }
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
+    if (sprite == undefined) {
+        console.log("Bailing on a null enemy shot")
+        return;
+    }
     sprite.startEffect(effects.disintegrate, 200)
     info.changeScoreBy(1)
     if (info.score() == 10) {
@@ -172,7 +167,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
         mySprite.say("Stay back!", 2000)
     }
     if (info.score() == 50) {
-        game.splash("Your knights' bodies in", "piles surround you.")
+        mySprite.say("I don't want to hurt you!", 2000)
     }
     if (info.score() == 80) {
         mySprite.say("I would never!", 2000)
@@ -204,7 +199,7 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
     }
     sprite.destroy()
     otherSprite.destroy()
-    if (info.score() == bossScoreThreshold) {
+    if (info.score() == bossScoreThreshold && inBossBattle == 0) {
         startBossBattle()
     }
 })
@@ -356,33 +351,16 @@ sprites.onOverlap(SpriteKind.bossFlame, SpriteKind.Player, function (sprite, oth
     info.changeLifeBy(-1)
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
-    game.splash("Anguish in his face as", "his blade falls upon you.")
     sprite.destroy()
-    scene.cameraShake(4, 500)
+    mySprite.startEffect(effects.fire, 1000)
+    scene.cameraShake(8, 2000)
     info.changeLifeBy(-1)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.sparkle, function (sprite, otherSprite) {
     hasSparkle = 1
     music.baDing.play()
     otherSprite.destroy()
-    mySparkleIndicator = sprites.create(img`
-        . . . . . 3 . . . . . . . . . . 
-        . . . . . 3 . . . . . . . . . . 
-        . . . . 3 1 3 . . . . . . . . . 
-        . . . . 3 1 3 . . . . . . . . . 
-        . . 3 3 1 9 1 3 3 . . . . . . . 
-        3 3 1 1 9 1 9 1 1 3 3 . . . . . 
-        . . 3 3 1 9 1 3 3 . . . . . . . 
-        . . . . 3 1 3 . . . . . . . . . 
-        . . . . 3 1 3 . . . . . . . . . 
-        . . . . . 3 . . . . . . . . . . 
-        . . . . . 3 . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.sparkleIndicator)
+    mySparkleIndicator = sprites.create(assets.image`prettySparkle`, SpriteKind.sparkleIndicator)
     mySparkleIndicator.follow(mySprite, 100)
 })
 info.onLifeZero(function () {
@@ -510,7 +488,7 @@ function fnBossFireball () {
         false
         )
         music.spooky.play()
-        bossFlame = sprites.create(img`
+        bossFlame2 = sprites.create(img`
             . . . . . 3 . . . . . . . . . . 
             . . . . . 3 . . . . . . . . . . 
             . . . . 3 1 3 . . . . . . . . . 
@@ -528,12 +506,12 @@ function fnBossFireball () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.bossFlame)
-        bossFlame.setPosition(bossSprite.x, bossSprite.y)
-        bossFlame.setVelocity(randint(-10, 10), 50)
-        bossFlame.setStayInScreen(false)
-        bossFlame.setFlag(SpriteFlag.DestroyOnWall, true)
+        bossFlame2.setPosition(bossSprite.x, bossSprite.y)
+        bossFlame2.setVelocity(randint(-10, 10), 50)
+        bossFlame2.setStayInScreen(false)
+        bossFlame2.setFlag(SpriteFlag.DestroyOnWall, true)
         animation.runImageAnimation(
-        bossFlame,
+        bossFlame2,
         [img`
             ........................
             ........................
@@ -670,13 +648,13 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Boss, function (sprite, otherSpr
     game.splash("Its raking claws rend ", "you from your body")
     game.over(false, effects.melt)
 })
-let ammoLightColor = 0
 let sparklePickup: Sprite = null
-let bossFlame: Sprite = null
+let bossFlame2: Sprite = null
 let myEnemy: Sprite = null
 let frontOrBack = 0
 let ammoPickup: Sprite = null
 let bossHealthBar: StatusBarSprite = null
+let bossSprite: Sprite = null
 let projectile: Sprite = null
 let projectile2: Sprite = null
 let speedoY = 0
@@ -686,12 +664,12 @@ let sparkleSpeed = 0
 let sparkleCount = 0
 let mySparkleIndicator: Sprite = null
 let hasSparkle = 0
-let bossSprite: Sprite = null
 let bossHealthSetting = 0
 let inBossBattle = 0
 let bossScoreThreshold = 0
 let ammoStatusBar: StatusBarSprite = null
 let mySprite: Sprite = null
+let ammoLightColor = 0
 mySprite = sprites.create(img`
     . . . . . . 5 . 5 . . . . . . . 
     . . . . . f 5 5 5 f f . . . . . 
@@ -884,9 +862,9 @@ scene.setBackgroundImage(img`
     `)
 tiles.setTilemap(tilemap`level1`)
 game.splash("Foul lies have turned the", "knights on the princess!")
-bossScoreThreshold = 100
+bossScoreThreshold = 10
 inBossBattle = 0
-bossHealthSetting = 50
+bossHealthSetting = 5
 game.onUpdateInterval(1000, function () {
     ammoStatusBar.value += 1
     if (inBossBattle == 0) {
@@ -904,56 +882,39 @@ game.onUpdateInterval(1000, function () {
 game.onUpdateInterval(20000, function () {
     if (hasSparkle == 0) {
         music.powerUp.play()
-        sparklePickup = sprites.create(img`
-            . . . . . 3 . . . . . . . . . . 
-            . . . . . 3 . . . . . . . . . . 
-            . . . . 3 1 3 . . . . . . . . . 
-            . . . . 3 1 3 . . . . . . . . . 
-            . . 3 3 1 9 1 3 3 . . . . . . . 
-            3 3 1 1 9 1 9 1 1 3 3 . . . . . 
-            . . 3 3 1 9 1 3 3 . . . . . . . 
-            . . . . 3 1 3 . . . . . . . . . 
-            . . . . 3 1 3 . . . . . . . . . 
-            . . . . . 3 . . . . . . . . . . 
-            . . . . . 3 . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `, SpriteKind.sparkle)
+        sparklePickup = sprites.create(assets.image`prettySparkle`, SpriteKind.sparkle)
         animation.runImageAnimation(
         sparklePickup,
         [img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . 3 . . . . . . . . . 
-            . . . . . . 3 . . . . . . . . . 
-            . . . . . 3 1 3 . . . . . . . . 
-            . . . . . 3 1 3 . . . . . . . . 
-            . . . 3 3 1 9 1 3 3 . . . . . . 
-            . 3 3 1 1 9 . 9 1 1 3 3 . . . . 
-            . . . 3 3 1 9 1 3 3 . . . . . . 
-            . . . . . 3 1 3 . . . . . . . . 
-            . . . . . 3 1 3 . . . . . . . . 
-            . . . . . . 3 . . . . . . . . . 
-            . . . . . . 3 . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
+            . . . . . . c . . . . . . . . . 
+            . . . . . c 3 c . . . . . . . . 
+            . . . . . c 3 c . . . . . . . . 
+            . . . . c 3 1 3 c . . . . . . . 
+            . . . c c 3 1 3 c c . . . . . . 
+            . c c 3 3 1 9 1 3 3 c c . . . . 
+            c 3 3 1 1 9 . 9 1 1 3 3 c . . . 
+            . c c 3 3 1 9 1 3 3 c c . . . . 
+            . . . c c 3 1 3 c c . . . . . . 
+            . . . . c 3 1 3 c . . . . . . . 
+            . . . . . c 3 c . . . . . . . . 
+            . . . . . c 3 c . . . . . . . . 
+            . . . . . . c . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `,img`
-            . . . . . . . . . . . . . . . . 
-            . 3 . . . . . . . . 3 . . . . . 
-            . . 3 3 . . . . 3 3 . . . . . . 
-            . . 3 1 3 . . 3 1 3 . . . . . . 
-            . . . 3 1 3 3 1 3 . . . . . . . 
-            . . . . 3 9 9 3 . . . . . . . . 
-            . . . . 3 9 9 3 . . . . . . . . 
-            . . . 3 1 3 3 1 3 . . . . . . . 
-            . . 3 1 3 . . 3 1 3 . . . . . . 
-            . . 3 3 . . . . 3 3 . . . . . . 
-            . 3 . . . . . . . . 3 . . . . . 
-            . . . . . . . . . . . . . . . . 
+            . c . . . . . . . . c . . . . . 
+            c 3 c c . . . . c c 3 c . . . . 
+            . c 3 3 c . . c 3 3 c . . . . . 
+            . c 3 1 3 c c 3 1 3 c . . . . . 
+            . . c 3 1 3 3 1 3 c . . . . . . 
+            . . . c 3 9 9 3 c . . . . . . . 
+            . . . c 3 9 9 3 c . . . . . . . 
+            . . c 3 1 3 3 1 3 c . . . . . . 
+            . c 3 1 3 c c 3 1 3 c . . . . . 
+            . c 3 3 c . . c 3 3 c . . . . . 
+            c 3 c c . . . . c c 3 c . . . . 
+            . c . . . . . . . . c . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -969,7 +930,7 @@ game.onUpdateInterval(20000, function () {
 // PyGamer Neopixel driver
 game.onUpdateInterval(200, function () {
     ammoLightColor = Colors.Pink
-    if (hasSparkle == 1) {
+if (hasSparkle == 1) {
         light.setPixelColor(4, 0x00ffff)
     } else {
         light.setPixelColor(4, 0x000000)
