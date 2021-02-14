@@ -862,9 +862,9 @@ scene.setBackgroundImage(img`
     `)
 tiles.setTilemap(tilemap`level1`)
 game.splash("Foul lies have turned the", "knights on the princess!")
-bossScoreThreshold = 10
+bossScoreThreshold = 100
 inBossBattle = 0
-bossHealthSetting = 5
+bossHealthSetting = 25
 game.onUpdateInterval(1000, function () {
     ammoStatusBar.value += 1
     if (inBossBattle == 0) {
